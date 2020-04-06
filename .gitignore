@@ -1,0 +1,11 @@
+.idea
+**/settings/local.py
+**/settings/develop.py
+**/settings/qa.py
+**/settings/testing.py
+**/settings/production.py
+*.sqlite3
+__pycache__/
+*.pyc
+**/static/assets/
+media/

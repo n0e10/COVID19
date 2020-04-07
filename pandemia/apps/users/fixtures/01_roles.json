@@ -1,0 +1,34 @@
+ [
+  {
+    "model": "users.rol",
+    "pk": 1,
+    "fields": {
+      "descripcion": "LOCAL",
+      "activo": "True"
+    }
+  },
+  {
+    "model": "users.rol",
+    "pk": 2,
+    "fields": {
+      "descripcion": "PROVINCIAL",
+      "activo": "True"
+    }
+  },
+  {
+    "model": "users.rol",
+    "pk": 3,
+    "fields": {
+      "descripcion": "DEPARTAMENTAL",
+      "activo": "True"
+    }
+  },
+  {
+    "model": "users.rol",
+    "pk": 4,
+    "fields": {
+      "descripcion": "GOBIERNO CENTRAL",
+      "activo": "True"
+    }
+  }
+]

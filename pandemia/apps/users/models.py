@@ -1,62 +1,76 @@
+from django.contrib.auth.models import User
 from django.db import models
-# from django.contrib.auth.models import AbstractUser
-# from django.utils.translation import ugettext_lazy as _
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 
 # admin $Adm1n2020
 # guest YMW5WJCA
 
-# Create your models here.
+# ================================
+
+class Perfil(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    nro_dni = models.CharField(max_length=8, null=True, blank=True)
+    nombres = models.CharField(max_length=50, blank=True)
+
+    # META CLASS
+    class Meta:
+        verbose_name_plural = "perfiles"
+
+    # SAVE METHOD
+    def save(self, *args, **kwargs):
+        if not self.nombres:
+            self.nombres = "{} {}".format(
+                self.user.last_name, self.user.first_name)
+        super(Perfil, self).save(*args, **kwargs)
+
+    # TO STRING METHOD
+    def __str__(self):
+        return "{}".format(self.user.username)
 
 
-class Permisos(models.Model):
-    permiso = models.CharField(max_length=50)
+"""
+Hooking the create_user_profile and save_user_profile methods to the User model, whenever a save event occurs.
+This kind of signal is called post_save.
+"""
+
+
+@receiver(post_save, sender=User)
+def create_user_perfil(sender, instance, created, **kwargs):
+    if created:
+        Perfil.objects.create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_user_perfil(sender, instance, **kwargs):
+    instance.perfil.save()
+
+
+class Rol(models.Model):
+    """
+        Define los roles del usuario que se pueden desempeñar
+        tales como: Local, Provincial, Departamental, Central
+    """
     descripcion = models.CharField(max_length=50)
-    # activo = models.IntegerField()
+    activo = models.BooleanField("Estado activo", default=True)
+
+    class Meta:
+        verbose_name_plural = "roles"
+
+    def __str__(self):
+        return "{}".format(self.descripcion)
 
 
-class Roles(models.Model):
-    rol = models.CharField(max_length=50)
-    descripcion = models.CharField(max_length=50)
-    # activo = models.IntegerField()
-    STATUS = (
-        ('Local', 'Local'),
-        ('Provincial', 'Provincial'),
-        ('Departamental', 'Departamental'),
-        ('Gobierno Central', 'Gobierno Central'),
-    )
-    nombre = models.CharField(max_length=200, null=True, choices=STATUS)
+class AmbitoPermiso(models.Model):
+    """
+        Ambito que el usuario tiene relacionado con el rol desempeñado
+    """
+    rol = models.ForeignKey(Rol, on_delete=models.CASCADE,
+                            related_name='ambitos')
+    perfil = models.ForeignKey(Perfil, on_delete=models.CASCADE,
+                               related_name='perfiles')
+    ubigeo = models.CharField('Ubigeo', max_length=50, blank=True, null=True)
 
-
-class RolPermiso(models.Model):
-    rol_id = models.ForeignKey(
-        Roles,
-        on_delete=models.CASCADE,
-    )  # type: Permisos
-    permiso_id = models.ForeignKey(
-        Permisos,
-        on_delete=models.CASCADE,
-    )
-
-
-class Usuarios(models.Model):
-    nombres = models.CharField(max_length=50)
-    email = models.CharField(max_length=50)
-    user_name = models.CharField(max_length=50)
-    password = models.CharField(max_length=50)
-    fecha_registro = models.DateTimeField(auto_now_add=True, null=True)
-    activo = models.IntegerField()
-
-    rol_id = models.ForeignKey(
-        Roles,
-        on_delete=models.CASCADE,
-    )
-
-
-class Ambito(models.Model):
-    ubigeo = models.CharField(max_length=10)
-    fecha_registro = models.DateTimeField(auto_now_add=True, null=True)
-
-    usuario_id = models.ForeignKey(
-        Usuarios,
-        on_delete=models.CASCADE,
-    )
+    def __str__(self):
+        return "{} {}".format(self.id, self.perfil)

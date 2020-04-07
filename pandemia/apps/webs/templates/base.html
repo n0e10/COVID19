@@ -1,0 +1,218 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{% block module-title %}{% endblock %} | GEOMATICA</title>
+
+	<!-- Global stylesheets -->
+	<link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
+	<link href="{% static 'assets' %}/css/icons/icomoon/styles.css" rel="stylesheet" type="text/css">
+	<link href="{% static 'assets' %}/css/bootstrap.css" rel="stylesheet" type="text/css">
+	<link href="{% static 'assets' %}/css/core.css" rel="stylesheet" type="text/css">
+	<link href="{% static 'assets' %}/css/components.css" rel="stylesheet" type="text/css">
+	<link href="{% static 'assets' %}/css/colors.css" rel="stylesheet" type="text/css">
+    <link href="{% static 'libs' %}/printJs/print.min.css" rel="stylesheet" type="text/css">
+    <link href="{% static 'webs' %}/css/app.css" rel="stylesheet" type="text/css">
+    <link href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css">
+	<!-- /global stylesheets -->
+
+    {% block custom-css %}
+
+    {% endblock %}
+
+
+	<!-- Core JS files -->
+	<script type="text/javascript" src="{% static 'assets' %}/js/plugins/loaders/pace.min.js"></script>
+	<script type="text/javascript" src="{% static 'assets' %}/js/core/libraries/jquery.min.js"></script>
+	<script type="text/javascript" src="{% static 'assets' %}/js/core/libraries/bootstrap.min.js"></script>
+	<script type="text/javascript" src="{% static 'assets' %}/js/plugins/loaders/blockui.min.js"></script>
+	<!-- /core JS files -->
+
+    <!-- PrintJS -->
+    <script type="text/javascript" src="{% static 'libs' %}/printJs/print.min.js"></script>
+    <!-- PrintJs -->
+
+
+	<!-- Theme JS files -->
+    <!-- buttons -->
+    <script type="text/javascript" src="{% static 'assets' %}/js/plugins/velocity/velocity.min.js"></script>
+	<script type="text/javascript" src="{% static 'assets' %}/js/plugins/velocity/velocity.ui.min.js"></script>
+	<script type="text/javascript" src="{% static 'assets' %}/js/plugins/buttons/spin.min.js"></script>
+	<script type="text/javascript" src="{% static 'assets' %}/js/plugins/buttons/ladda.min.js"></script>
+
+    <!-- notificaciones y alertas -->
+    <script type="text/javascript" src="{% static 'assets' %}/js/plugins/notifications/bootbox.min.js"></script>
+	<script type="text/javascript" src="{% static 'assets' %}/js/plugins/notifications/sweet_alert.min.js"></script>
+	<script type="text/javascript" src="{% static 'assets' %}/js/plugins/forms/selects/select2.min.js"></script>
+    <script type="text/javascript" src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+    <!-- app custom -->
+    <script type="text/javascript" src="{% static 'assets' %}/js/core/app.js"></script>
+    <script type="text/javascript" src="{% static 'webs' %}/js/main.js"></script>
+    <script type="text/javascript" src="{% static 'webs' %}/js/ui.js"></script>
+    <script type="text/javascript" src="{% static 'webs' %}/js/events.js"></script>
+    <script type="text/javascript" src="{% static 'webs' %}/js/config.js"></script>
+	<!-- /theme JS files -->
+
+    <script type="text/javascript">
+        let API_BASE_URL = "{{ webs.api_base_url }}";
+        let MEDIA_URL = "{{ webs.media_url }}";
+    </script>
+    {% block custom-js%}
+
+
+
+    {% endblock %}
+
+</head>
+
+<body>
+    <div style="display: none" id="csrf_token">
+        {% csrf_token %}
+    </div>
+    {% block modal %}{% endblock %}
+	<!-- Main navbar -->
+	<div class="navbar navbar-inverse">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="/">
+                <b>GEOMATICA</b>
+            </a>
+
+			<ul class="nav navbar-nav visible-xs-block">
+				<li><a data-toggle="collapse" data-target="#navbar-mobile"><i class="icon-tree5"></i></a></li>
+				<li><a class="sidebar-mobile-main-toggle"><i class="icon-paragraph-justify3"></i></a></li>
+			</ul>
+		</div>
+
+		<div class="navbar-collapse collapse" id="navbar-mobile">
+			<ul class="nav navbar-nav">
+				<li><a class="sidebar-control sidebar-main-toggle hidden-xs"><i class="icon-paragraph-justify3"></i></a></li>
+			</ul>
+
+            <ul class="nav navbar-nav">
+				<!--
+                <li style="padding-top: 5px;">
+                    <select id="periodo" class="form-control"></select>
+                </li>
+                -->
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li class="dropdown dropdown-user">
+					<a class="dropdown-toggle" data-toggle="dropdown">
+						<img src="{% static 'assets' %}/images/placeholder.jpg" alt="">
+						<span>{{ user }}</span>
+						<i class="caret"></i>
+					</a>
+					<ul class="dropdown-menu dropdown-menu-right">
+						<li><a href="{% url 'webs:logout' %}">Cerrar Sesión</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<!-- /main navbar -->
+
+
+	<!-- Page container -->
+	<div class="page-container">
+
+		<!-- Page content -->
+		<div class="page-content">
+
+			<!-- Main sidebar -->
+			<div class="sidebar sidebar-main">
+				<div class="sidebar-content">
+					<!-- Main navigation -->
+					<div class="sidebar-category sidebar-category-visible">
+						<div class="category-content no-padding">
+							<ul class="navigation navigation-main navigation-accordion">
+								<li class="navigation-header">
+                                    <span>{{ webs.stage }}</span> <i class="icon-menu" title="{{ webs.stage }}"></i>
+                                </li>
+
+                                {% for menu in webs.menu %}
+								<li {% if menu.code == layout.code %}class="active"{% endif %}>
+                                    <a href="{{ menu.link }}"><i class="{{ menu.icon_css }}"></i> <span>{{ menu.title }}</span></a>
+                                    {% if  menu.children%}
+                                    <ul>
+                                    {% for children in menu.children %}
+                                        <li {% if children.code == layout.code %}class="active"{% endif %}>
+                                            <a href="{{ children.link }}">{{ children.title }}</a>
+                                        </li>
+                                    {% endfor %}
+                                    </ul>
+                                    {% endif %}
+                                </li>
+                                {% endfor %}
+							</ul>
+						</div>
+					</div>
+					<!-- /main navigation -->
+
+				</div>
+			</div>
+			<!-- /main sidebar -->
+
+
+			<!-- Main content -->
+			<div class="content-wrapper">
+
+				<!-- Page header -->
+				<div class="page-header page-header-default">
+					<div class="page-header-content">
+						<div class="page-title">
+							<h4>
+                                <i class="{{ layout.icon_css }} position-left"></i>
+                                <span class="text-semibold">{{ layout.title }}</span>
+                            </h4>
+						</div>
+                        <!-- Accesos directos a modulso vistas internas
+						<div class="heading-elements">
+							<div class="heading-btn-group">
+								<a href="#" class="btn btn-link btn-float has-text"><i class="icon-bars-alt text-primary"></i><span>Statistics</span></a>
+								<a href="#" class="btn btn-link btn-float has-text"><i class="icon-calculator text-primary"></i> <span>Invoices</span></a>
+								<a href="#" class="btn btn-link btn-float has-text"><i class="icon-calendar5 text-primary"></i> <span>Schedule</span></a>
+							</div>
+						</div>
+						-->
+					</div>
+
+
+				</div>
+				<!-- /page header -->
+
+
+				<!-- Content area -->
+				<div class="content">
+                    <div class="panel panel-flat">
+                        <div class="panel-heading body-top">
+                            {% block body-top %}{% endblock %}
+                        </div>
+						<div class="panel-body">
+                            {% block body %}{% endblock %}
+						</div>
+                    </div>
+
+					<!-- Footer -->
+					<div class="footer text-muted">
+						&copy; 2019. <a href="https://www.inei.gob.pe" target="_blank">INEI-OTIN</a>
+					</div>
+					<!-- /footer -->
+
+				</div>
+				<!-- /content area -->
+
+			</div>
+			<!-- /main content -->
+
+		</div>
+		<!-- /page content -->
+
+	</div>
+	<!-- /page container -->
+    {% block script %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,134 @@
+{% load staticfiles %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>SEGMENTACION-CENEC</title>
+
+	<!-- Global stylesheets -->
+	<link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
+	<link href="{% static 'assets' %}/css/icons/icomoon/styles.css" rel="stylesheet" type="text/css">
+	<link href="{% static 'assets' %}/css/bootstrap.css" rel="stylesheet" type="text/css">
+	<link href="{% static 'assets' %}/css/core.css" rel="stylesheet" type="text/css">
+	<link href="{% static 'assets' %}/css/components.css" rel="stylesheet" type="text/css">
+	<link href="{% static 'assets' %}/css/colors.css" rel="stylesheet" type="text/css">
+    <link href="{% static 'webs' %}/css/app.css" rel="stylesheet" type="text/css">
+	<!-- /global stylesheets -->
+
+	<!-- Core JS files -->
+	<script type="text/javascript" src="{% static 'assets' %}/js/plugins/loaders/pace.min.js"></script>
+	<script type="text/javascript" src="{% static 'assets' %}/js/core/libraries/jquery.min.js"></script>
+	<script type="text/javascript" src="{% static 'assets' %}/js/core/libraries/bootstrap.min.js"></script>
+	<script type="text/javascript" src="{% static 'assets' %}/js/plugins/loaders/blockui.min.js"></script>
+	<!-- /core JS files -->
+
+
+	<!-- Theme JS files -->
+	<script type="text/javascript" src="{% static 'assets' %}/js/core/app.js"></script>
+    <script type="text/javascript" src="{% static 'webs' %}/js/ui.js"></script>
+	<!-- /theme JS files -->
+
+</head>
+
+<body class="login-container">
+
+	<!-- Main navbar -->
+	<div class="navbar navbar-inverse">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="/">
+                PORTAL GEOMATICA PILOTO
+            </a>
+
+			<ul class="nav navbar-nav pull-right visible-xs-block">
+				<li><a data-toggle="collapse" data-target="#navbar-mobile"><i class="icon-tree5"></i></a></li>
+			</ul>
+		</div>
+	</div>
+	<!-- /main navbar -->
+
+
+	<!-- Page container -->
+	<div class="page-container">
+
+		<!-- Page content -->
+		<div class="page-content">
+
+			<!-- Main content -->
+			<div class="content-wrapper">
+
+				<!-- Content area -->
+				<div class="content">
+
+					<!-- Simple login form -->
+					<form method="post" action="{% url 'webs:login' %}">
+                        {% csrf_token %}
+						<div class="panel panel-body login-form">
+							<div class="text-center">
+								<div class="text-slate-300"><img src="{% static 'webs' %}/images/logoInei.png"></div>
+								<h5 class="content-group" style="font-size: 22px;">PORTAL GEOMATICA PILOTO</h5>
+							</div>
+
+							<div class="form-group has-feedback has-feedback-left">
+                                {{ form.username|attr:"class:form-control"|attr:"placeholder:Usuario" }}
+								<!--<input type="text" class="form-control" placeholder="Username">-->
+								<div class="form-control-feedback">
+									<i class="icon-user text-muted"></i>
+								</div>
+							</div>
+
+							<div class="form-group has-feedback has-feedback-left">
+								<!--<input type="text" class="form-control" placeholder="Password">-->
+                                {{ form.password|attr:"class:form-control"|attr:"placeholder:Contraseña" }}
+								<div class="form-control-feedback">
+									<i class="icon-lock2 text-muted"></i>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<button type="submit" class="btn btn-primary btn-block botonSpin btn-botonValidarForm">
+                                    Iniciar sesión <i class="icon-circle-right2 position-right"></i>
+                                </button>
+                                <input type="hidden" name="next" value="{{ next }}">
+							</div>
+                            {% if form.errors %}
+                            <div class="text-center errors bg-danger">
+								Error, El usuario o contraseña es incorrecto
+							</div>
+                            {% endif %}
+						</div>
+					</form>
+					<!-- /simple login form -->
+
+
+					<!-- Footer -->
+					<div class="footer text-black text-center">
+                        &copy; 2019. <a href="https://www.inei.gob.pe" target="_blank">INEI-OTIN</a>
+					</div>
+					<!-- /footer -->
+
+				</div>
+				<!-- /content area -->
+
+			</div>
+			<!-- /main content -->
+
+		</div>
+		<!-- /page content -->
+
+	</div>
+	<!-- /page container -->
+
+</body>
+<script>
+    $(document).ready(function () {
+        $(".btn-botonValidarForm").click(function () {
+            if('input:invalid'){
+                setTimeout(function(){ toolsApp.botonSpin.finalizarLoading(); }, 500);
+            }
+        });
+    });
+</script>
+</html>

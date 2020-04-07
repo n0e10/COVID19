@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block body-top %}
+    {% if dashboard.summaries %}
+    <div class="row">
+        {% for summary in dashboard.summaries %}
+        <div class="col-lg-3">
+            <div class="panel {{ summary.color_css }}">
+                <div class="panel-body">
+                    <h3 class="no-margin">{{ summary.value }}</h3>
+                    {{ summary.title }}
+                    <div class="text-muted text-size-small">{{ summary.description }}</div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+{% endblock %}
+{% block body %}
+    <div class="row">
+        <h1 class="tituloDivisor"> Acceso a Módulos</h1>
+
+
+    </div>
+
+    <div class="row">
+        {% for menu in webs.menu %}
+        <div class="col-lg-4">
+            <div class="row contenedorBlockMenu">
+                <div class="col-lg-6 text-center">
+                    <i class="{{ menu.icon_css }} iconTitulo"></i>
+                    <h2>{{ menu.title }}</h2>
+                </div>
+
+                <div class="col-lg-6">
+                    <ul>
+                        {% if  menu.children%}
+                            {% for children in menu.children %}
+                            <li>
+                                <a href="{{ children.link }}">{{ children.title }}</a>
+                            </li>
+                            {% endfor %}
+                        {% else %}
+                        <li>
+                            <a href="{{ menu.link }}">{{ menu.title }}</a>
+                        </li>
+                        {% endif %}
+
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

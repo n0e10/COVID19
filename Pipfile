@@ -9,6 +9,7 @@ verify_ssl = true
 pyodbc = "==4.0.27"
 django-pyodbc-azure = "*"
 djangorestframework = "*"
+django-widget-tweaks = "*"
 
 [requires]
 python_version = "3.5"
